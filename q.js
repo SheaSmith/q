@@ -147,7 +147,7 @@ var nextTick =(function () {
                 if (domain) {
                     domain.exit();
                 }
-                setTimeout(flush, 0);
+                atv.setTimeout(flush, 0);
                 if (domain) {
                     domain.enter();
                 }
@@ -157,7 +157,7 @@ var nextTick =(function () {
             } else {
                 // In browsers, uncaught exceptions are not fatal.
                 // Re-throw them asynchronously to avoid slow-downs.
-                setTimeout(function () {
+                atv.setTimeout(function () {
                     throw e;
                 }, 0);
             }
@@ -187,7 +187,7 @@ var nextTick =(function () {
         // To see through fake Node environments:
         // * Mocha test runner - exposes a `process` global without a `nextTick`
         // * Browserify - exposes a `process.nexTick` function that uses
-        //   `setTimeout`. In this case `setImmediate` is preferred because
+        //   `atv.setTimeout`. In this case `setImmediate` is preferred because
         //    it is faster. Browserify's `process.toString()` yields
         //   "[object Object]", while in a real Node environment
         //   `process.toString()` yields "[object process]".
@@ -224,14 +224,14 @@ var nextTick =(function () {
             channel.port2.postMessage(0);
         };
         requestTick = function () {
-            setTimeout(flush, 0);
+            atv.setTimeout(flush, 0);
             requestPortTick();
         };
 
     } else {
         // old browsers
         requestTick = function () {
-            setTimeout(flush, 0);
+            atv.setTimeout(flush, 0);
         };
     }
     // runs a task after all other tasks have been run
@@ -1841,7 +1841,7 @@ Q.timeout = function (object, ms, error) {
 
 Promise.prototype.timeout = function (ms, error) {
     var deferred = defer();
-    var timeoutId = setTimeout(function () {
+    var timeoutId = atv.setTimeout(function () {
         if (!error || "string" === typeof error) {
             error = new Error(error || "Timed out after " + ms + " ms");
             error.code = "ETIMEDOUT";
@@ -1880,7 +1880,7 @@ Q.delay = function (object, timeout) {
 Promise.prototype.delay = function (timeout) {
     return this.then(function (value) {
         var deferred = defer();
-        setTimeout(function () {
+        atv.setTimeout(function () {
             deferred.resolve(value);
         }, timeout);
         return deferred.promise;
